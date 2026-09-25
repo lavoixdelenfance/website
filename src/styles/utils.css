@@ -1,37 +1,5 @@
 @reference "./tailwind.css";
 
-@font-face {
-  font-family: "Apfel";
-  src: url("/fonts/ApfelGrotezk-Satt.woff2") format("woff2");
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Apfel";
-  src: url("/fonts/ApfelGrotezk-Regular.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Apfel";
-  src: url("/fonts/ApfelGrotezk-Mittel.woff2") format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Apfel";
-  src: url("/fonts/ApfelGrotezk-Fett.woff2") format("woff2");
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
 h1,
 h2,
 h3,
