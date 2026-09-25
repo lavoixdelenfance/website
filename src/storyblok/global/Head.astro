@@ -74,6 +74,17 @@ if (theme.fonts) {
       }
     `
   })
+  // The menu (header nav links/buttons) contains no p/h* tags, so a selector
+  // like "p, h1, h2..." never matches it. Apply the first (body) font to the
+  // menu so it follows the theme instead of falling back to sans-serif.
+  const menuFont = theme.fonts[0]
+  if (menuFont) {
+    css += `
+      header nav a, header nav button {
+        font-family: ${menuFont.nom}, ${menuFont.fallback};
+      }
+    `
+  }
 }
 
 const {
