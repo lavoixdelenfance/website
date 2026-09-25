@@ -1,14 +1,5 @@
 @reference "./tailwind.css";
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: "Apfel", sans-serif;
-}
-
 .container {
   @apply w-[calc(100%_-_2.5rem)] lg:w-[calc(100%_-_4rem)] mx-auto max-w-lg md:max-w-3xl lg:max-w-5xl xl:max-w-7xl;
 }
