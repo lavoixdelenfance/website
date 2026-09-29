@@ -3,7 +3,7 @@ import { RichTextSchema, renderRichText } from '@storyblok/astro'
 import cloneDeep from 'clone-deep'
 import toUrl from '../../utils/toUrl'
 
-const { content } = Astro.props
+const { content, olStart } = Astro.props
 
 const mySchema = cloneDeep(RichTextSchema)
 let renderedRichText = renderRichText(content, {
@@ -25,6 +25,15 @@ const tickSvg = `<svg class="inline mr-4 size-3.5" xmlns="http://www.w3.org/2000
 renderedRichText = renderedRichText?.replace(/<ul>[\s\S]*?<\/ul>/g, (block) =>
   block.replaceAll('<li>', `<li>${tickSvg}`)
 )
+
+// Optional start number for the first ordered list (e.g. continue the
+// numbering of a list from a previous block). Ignored when empty or < 2.
+const startAt = Number(olStart)
+if (Number.isFinite(startAt) && startAt > 1) {
+  renderedRichText = renderedRichText?.replace(/<ol(?![^>]*\bstart=)[^>]*>/, (tag) =>
+    tag.replace('>', ` start="${Math.floor(startAt)}">`)
+  )
+}
 ---
 
 <div class="prose xl:prose-xl rich-text max-w-prose">
