@@ -4,6 +4,23 @@ import RichText from './utils/RichText.astro'
 import { Image } from 'astro:assets'
 
 const { blok } = Astro.props
+
+// Storyblok multilink can be a story link ({ story: { full_slug }, anchor })
+// or a url link ({ url: "#structure" / "https://..." }), email, asset, etc.
+// The old code only handled story links, so an anchor like "#structure"
+// rendered as "/undefined".
+function resolvePersonLink(link) {
+  if (!link || typeof link !== 'object') return null
+  const slug = link.story?.full_slug || (link.linktype === 'story' ? link.cached_url : null)
+  if (slug) {
+    let href = slug.startsWith('/') ? slug : '/' + slug
+    if (link.anchor) href += '#' + String(link.anchor).replace(/^#/, '')
+    return href
+  }
+  if (link.url) return link.url
+  if (link.email) return `mailto:${link.email}`
+  return null
+}
 ---
 
 <section class="container" {...storyblokEditable(blok)}>
@@ -14,10 +31,12 @@ const { blok } = Astro.props
     role="list"
     class="mt-12 text-center grid sm:grid-cols-2 md:grid-cols-3 lg:divide-x divide-base-content/50 lg:grid-cols-4 lg:mt-24">
     {
-      blok.team?.map((person, index) => (
-        <li class="p-8" data-aos="fade-up" data-aos-duration={1000 + index * 500}>
-          {person.url && (
-            <a href={'/' + person.url?.story?.full_slug}>
+      blok.team?.map((person, index) => {
+        const href = resolvePersonLink(person.url)
+        return (
+          <li class="p-8" data-aos="fade-up" data-aos-duration={1000 + index * 500}>
+            {href ? (
+              <a href={href}>
               <div class="flex flex-col gap-4">
                 {person.image?.filename && (
                   <Image
@@ -38,7 +57,7 @@ const { blok } = Astro.props
               </div>
             </a>
           )}
-          {!person.url && (
+          {!href && (
             <div class="flex flex-col gap-4">
               {person.image?.filename && (
                 <Image
@@ -59,7 +78,8 @@ const { blok } = Astro.props
             </div>
           )}
         </li>
-      ))
+        )
+      })
     }
   </ul>
 </section>
