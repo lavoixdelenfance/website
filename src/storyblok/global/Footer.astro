@@ -32,6 +32,31 @@ const { logo, name, slogan, menu, rs } = Astro.props
         <br />
         {slogan}
       </p>
+      {
+        rs?.length > 0 && (
+          <div class="flex gap-4 mt-4">
+            {rs.map((reseau: any) => (
+              <a
+                href={reseau.url || undefined}
+                class={`icones-social-12 ${reseau.name}`}
+                rel="external noopener noreferrer"
+                title={`Voir notre page ${reseau.name}`}
+                target="_blank"
+                aria-label={`lien vers ${reseau.name}`}>
+                {reseau.icon?.filename && (
+                  <img
+                    src={reseau.icon.filename}
+                    alt={reseau.icon.alt || reseau.name}
+                    class="rs-icon w-8 h-auto"
+                    loading="lazy"
+                    onerror="this.style.display='none'"
+                  />
+                )}
+              </a>
+            ))}
+          </div>
+        )
+      }
     </aside>
     {
       menu.map((cat) => {
@@ -57,24 +82,7 @@ const { logo, name, slogan, menu, rs } = Astro.props
     }
   </div>
 
-  <div class="border-t mt-8 flex justify-between pt-8">
-    <div class="rs self-baseline">
-      <div class="rs gap-5 flex">
-        {
-          rs?.map((reseau: any) => (
-            <a
-              href={reseau.url.url}
-              class={`icones-social-12 ${reseau.name}`}
-              rel="external noopener noreferrer"
-              title={`Voir notre page ${reseau.name}`}
-              target="_blank"
-              aria-label={`lien vers ${reseau.name}`}>
-              {reseau.icon.filename && <img src={reseau.icon.filename} class={`rs-icon w-12 h-auto`} />}
-            </a>
-          ))
-        }
-      </div>
-    </div>
+  <div class="border-t mt-8 flex justify-end pt-8">
     <aside>
       <div
         class="md:row-start-2 md:col-span-4 col-span-1 mt-2 body-sm flex flex-col gap-4 justify-self-center lg:justify-self-end">
