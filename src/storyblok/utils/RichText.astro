@@ -19,9 +19,11 @@ let renderedRichText = renderRichText(content, {
   }
 })
 
-renderedRichText = renderedRichText?.replaceAll(
-  '<li>',
-  `<li><svg class="inline mr-4 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+// Custom bullet for unordered lists only: ordered lists already show numbers,
+// so injecting the tick there would render a stray "1. ✓" marker.
+const tickSvg = `<svg class="inline mr-4 size-3.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+renderedRichText = renderedRichText?.replace(/<ul>[\s\S]*?<\/ul>/g, (block) =>
+  block.replaceAll('<li>', `<li>${tickSvg}`)
 )
 ---
 
@@ -36,7 +38,8 @@ renderedRichText = renderedRichText?.replaceAll(
   .rich-text :global(ul) {
     list-style: none;
   }
-  .rich-text :global(ul li p) {
+  .rich-text :global(ul li p),
+  .rich-text :global(ol li p) {
     display: inline;
     margin-block: 0.25rem;
   }
