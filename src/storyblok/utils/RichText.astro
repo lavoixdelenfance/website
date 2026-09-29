@@ -34,6 +34,16 @@ if (Number.isFinite(startAt) && startAt > 1) {
     tag.replace('>', ` start="${Math.floor(startAt)}">`)
   )
 }
+
+// Pally's middle dot (·, U+00B7, used in inclusive writing) sits on a 0.50em
+// advance for 0.19em of ink, leaving visible gaps. Wrap it (text nodes only,
+// never inside tags) so CSS can tighten its side bearings.
+renderedRichText = renderedRichText
+  ?.split(/(<[^>]*>)/g)
+  .map((chunk) =>
+    chunk.startsWith('<') ? chunk : chunk.replaceAll('·', `<span class="tight-middot">·</span>`)
+  )
+  .join('')
 ---
 
 <div class="prose xl:prose-xl rich-text max-w-prose">
@@ -51,6 +61,9 @@ if (Number.isFinite(startAt) && startAt > 1) {
   .rich-text :global(ol li p) {
     display: inline;
     margin-block: 0.25rem;
+  }
+  .rich-text :global(.tight-middot) {
+    margin-inline: -0.1em;
   }
   .rich-text :global(a:not(.btn)) {
     text-decoration: underline;
